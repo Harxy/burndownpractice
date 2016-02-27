@@ -99,13 +99,16 @@ end
 
 post '/new' do
   authenticate!
-  graph = Graph.create(
-    user: session[:user_id],
-    date_started: Date.today.strftime("%F"),
-    name: params['name'],
-    wordcount: params['wordcount'].to_i,
-    days: params['days'].to_i,
-    daily_wordcount: {}
-  )
-  redirect to('/graph/' + graph.id)
+  if params['wordcount'].to_i > params['days'].to_i
+    graph = Graph.create(
+      user: session[:user_id],
+      date_started: Date.today.strftime("%F"),
+      name: params['name'],
+      wordcount: params['wordcount'].to_i,
+      days: params['days'].to_i,
+      daily_wordcount: {}
+    )
+      redirect to('/graph/' + graph.id)
+  end
+  redirect to('/new')
 end
