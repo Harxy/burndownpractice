@@ -27,9 +27,8 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="/index">Overview</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="/index">My Projects</a></li>
+            <li><a href="/new">New Project</a></li>
             <% if session[:user_id] %>
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">My Graphs <span class="caret"></span></a>
@@ -42,8 +41,9 @@
                   <li><a href="#">Coming soon...</a></li>
                 </ul>
               </li>
-              <li><a href="/new">New Project</a></li>
             <% end %>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
           </ul>
           <% if session[:user_id] %>
             <p class="navbar-text navbar-right">Signed in as <a href="/signout" class="navbar-link"><%= session[:user_name] %></a></p>

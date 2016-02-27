@@ -4,13 +4,14 @@ require 'user'
 require 'sinatra'
 require 'chartkick'
 require 'time'
-require 'pry'
 require 'strftime'
 require 'authenticate'
 require 'bcrypt'
 require 'build_graph'
 
 include Authenticate
+set :static, true
+set :public_folder, "public"
 
 configure do
   Mongoid.load!("./mongoid.yml")
@@ -62,9 +63,11 @@ end
 
 post '/signin' do
   user = User.find_by(username: params['username']) if User.find_by(username: params['username'])
-  if user.password == BCrypt::Engine.hash_secret(params[:password], user.password_salt)
-    session[:user_id] = user._id
-    session[:user_name] = user.username
+  if user
+    if user.password == BCrypt::Engine.hash_secret(params[:password], user.password_salt)
+      session[:user_id] = user._id
+      session[:user_name] = user.username
+    end
   end
   redirect to('/index')
 end
@@ -75,27 +78,28 @@ get "/signout" do
   redirect "/signin"
 end
 
-  post '/graph/:id' do
-    authenticate!
-    graph = Graph.find(params[:id])
-    time = Date.today.strftime("%F")
-    if graph.daily_wordcount[time]
-      graph.daily_wordcount[time] += params['wordcount'].to_i
-    else
-      graph.daily_wordcount[time] = params['wordcount'].to_i
-    end
-    graph.save
-    redirect to('/graph/' + graph.id)
+post '/graph/:id' do
+  authenticate!
+  graph = Graph.find(params[:id])
+  time = Date.today.strftime("%F")
+  if graph.daily_wordcount[time]
+    graph.daily_wordcount[time] += params['wordcount'].to_i
+  else
+    graph.daily_wordcount[time] = params['wordcount'].to_i
   end
+  graph.save
+  redirect to('/graph/' + graph.id)
+end
 
-  get '/new' do
-    authenticate!
-    @graphs = Graph.where(user: session[:user_id].to_s)
-    erb :new
-  end
+get '/new' do
+  authenticate!
+  @graphs = Graph.where(user: session[:user_id].to_s)
+  erb :new
+end
 
-  post '/new' do
-    authenticate!
+post '/new' do
+  authenticate!
+  if params['wordcount'].to_i > params['days'].to_i
     graph = Graph.create(
       user: session[:user_id],
       date_started: Date.today.strftime("%F"),
@@ -104,5 +108,7 @@ end
       days: params['days'].to_i,
       daily_wordcount: {}
     )
-    redirect to('/graph/' + graph.id)
+      redirect to('/graph/' + graph.id)
   end
+  redirect to('/new')
+end

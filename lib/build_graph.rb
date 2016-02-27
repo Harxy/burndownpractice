@@ -9,6 +9,7 @@ class BuildGraph
     data = {}
     date = graph.date_started
     cumulative_wordcount = graph.wordcount
+    data[(date - 1).strftime("%F")] = cumulative_wordcount
     while cumulative_wordcount > graph.wordcount_per_day do
       cumulative_wordcount -= graph.wordcount_per_day
       data[date.strftime("%F")] = cumulative_wordcount
@@ -19,7 +20,7 @@ class BuildGraph
   end
 
   def user_data
-    date = graph.date_started
+    date = graph.date_started - 1
     words_left_to_write = graph.wordcount
     data = {}
     (date..Date.today).each do |now|
