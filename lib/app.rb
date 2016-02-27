@@ -36,6 +36,7 @@ get '/graph/:id' do
   graph_data = BuildGraph.new(graph: @graph)
   @data = graph_data.burndown_data
   @user_data = graph_data.user_data
+  @full_data = graph_data.full_burndown_data
   erb :graph
 end
 
