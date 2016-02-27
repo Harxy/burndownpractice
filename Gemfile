@@ -9,6 +9,7 @@ gem "bcrypt"
 gem "mongoid"
 gem "redcarpet"
 gem "strftime"
+gem "rack-flash-session"
 
 group :test, :development do
   gem "shotgun"
