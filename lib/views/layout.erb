@@ -1,0 +1,61 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Burndown</title>
+    <link href="/css/bootstrap-responsive.css" rel="stylesheet">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/custom.css">
+    <script src="../highcharts.js"></script>
+    <script src="../chartkick.js"></script>
+  </head>
+  <body style="padding: 70px 0px;">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/index"><img src="/img/circle-flame.png" width="37px" /> Burndown</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="/index">Overview</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <% if session[:user_id] %>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">My Graphs <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li class="dropdown-header">Your Graphs</li>
+                  <% @graphs.each do |graph| %>
+                    <li> <a href="/graph/<%= graph.id %>"> <%= graph.name %> </a> </li>
+                  <% end %>
+                  <li class="dropdown-header">Shared Graphs</li>
+                  <li><a href="#">Coming soon...</a></li>
+                </ul>
+              </li>
+              <li><a href="/new">New Project</a></li>
+            <% end %>
+          </ul>
+          <% if session[:user_id] %>
+            <p class="navbar-text navbar-right">Signed in as <a href="/signout" class="navbar-link"><%= session[:user_name] %></a></p>
+          <% else %>
+            <p class="navbar-text navbar-right"><a href="/signin" class="navbar-link">Sign in</a></p>
+          <% end %>
+
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    <div id='main'>
+      <%= yield %>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,51 @@
+<div class="container">
+  <h1> Project <%= @graph.name %> </h1>
+  <% colour = @graph.on_track? ? "green" : "red" %>
+  <% if @graph.on_track? %>
+    <h4 style="color:<%= colour %>"> Currently on track </h4>
+  <% else %>
+    <h4 style="color:<%= colour %>"> Requires <%= @graph.requires_to_get_on_track %> words today to get back on track </h4>
+  <% end %>
+  <%=
+    line_chart(
+      [ { "name":"Burndown","data": @data},
+        { "name":"Wordcount Required", "data": @user_data}
+    ], colors: ["blue", colour]
+    )%>
+
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Large modal</button>
+
+  <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <h4> Zoom in </h4>
+        <%=
+          line_chart(
+            [ { "name":"Burndown","data": @data},
+              { "name":"Wordcount Required", "data": @user_data}
+          ], colors: ["blue", colour]
+          )%>
+    </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h4> About your project </h4>
+      <p> Stay below the blue line! </p>
+      <p> So far you have written <%= @graph.cumulative %> words on this project. You should have written <%= @graph.current_burndown %> by now!</p>
+      <p> You wanted to write <%= @graph.wordcount %> words in <%= @graph.days %> days. </p>
+      <p> This means writing <%= @graph.wordcount_per_day %> words per day. You'll be all done by <%= @graph.finish_date %> if you do your word count daily! </p>
+    </div>
+    <div class="col-md-6">
+      <h4> Adding to your wordcount </h4>
+      <p> You can add your wordcount below! </p>
+
+      <form action="/graph/<%= @graph.id %>" class="form-inline" method="POST">
+        <p> I wrote </p>
+        <input type="number" placeholder="Word Count" name="wordcount">
+        <p> words today </p>
+        <button type="submit" class="btn">submit</button>
+      </form>
+    </div>
+  </div>
+</div>

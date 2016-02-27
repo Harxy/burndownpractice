@@ -1,0 +1,22 @@
+<div class="container">
+  <h4> <%= session[:user_name] %>'s Projects </h4>
+  </br>
+  <% if @graphs.any? %>
+    <div class='list-group'>
+      <% @graphs = @graphs.sort { |y,x| x.requires_to_get_on_track <=> y.requires_to_get_on_track } %>
+      <% @graphs.each do |graph| %>
+        <% if graph.on_track? %>
+          <a href="/graph/<%= graph.id %>" class="list-group-item list-group-item-success">
+            <%= graph.name %>
+            <span class="badge">On track</span>
+          <% else %>
+            <a href="/graph/<%= graph.id %>" class="list-group-item list-group-item-danger">
+              <%= graph.name %>
+              <span class="badge"><%= graph.requires_to_get_on_track %> words required today</span>
+            <% end %>
+            </a>
+          <% end %>
+    </div>
+  <% end %>
+  <a type="button" class="btn btn-primary btn-lg" href="/new">New Project</a>
+</div>
