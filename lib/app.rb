@@ -10,6 +10,8 @@ require 'bcrypt'
 require 'build_graph'
 
 include Authenticate
+set :static, true
+set :public_folder, "#{File.dirname(__FILE__)}/public"
 
 configure do
   Mongoid.load!("./mongoid.yml")
