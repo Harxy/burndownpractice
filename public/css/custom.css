@@ -6,8 +6,10 @@
   margin-top: -10px;
 }
 
+#longModal {
+  width:700px;
+}
+
 .modal-content {
   padding: 20px;
-  /* height: 400px; */
-  width: 700px;
 }

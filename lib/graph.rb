@@ -9,6 +9,7 @@ class Graph
   field :wordcount,   type: Integer
   field :days, type: Integer
   field :daily_wordcount, type: Hash
+  field :desc, type: String
 
   def wordcount_per_day
     wordcount / days
@@ -30,7 +31,27 @@ class Graph
     current_burndown - cumulative
   end
 
+  def fancy_finish_date
+    (date_started + days - 1).strftime("%B %-d, %Y")
+  end
+
+  def fancy_start_date
+    date_started.strftime("%B %-d, %Y")
+  end
+
   def finish_date
     (date_started + days - 1).strftime("%F")
+  end
+
+  def days_left
+    Date.parse(finish_date).mjd - Date.today.mjd + 1
+  end
+
+  def words_left
+    wordcount - cumulative
+  end
+
+  def current_required_wordcount
+    words_left / days_left
   end
 end

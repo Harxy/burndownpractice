@@ -103,6 +103,7 @@ post '/new' do
   if params['wordcount'].to_i > params['days'].to_i
     graph = Graph.create(
       user: session[:user_id],
+      desc: params['desc'],
       date_started: Date.today.strftime("%F"),
       name: params['name'],
       wordcount: params['wordcount'].to_i,

@@ -6,6 +6,7 @@
   <% else %>
     <h4 style="color:<%= colour %>"> Requires <%= @graph.requires_to_get_on_track %> words today to get on track </h4>
   <% end %>
+  <p> <b> Description: <%= @graph.desc %> </b> </p>
   <%=
     line_chart(
       [ { "name":"Burndown","data": @data},
@@ -16,9 +17,25 @@
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
     Overview
   </button>
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#wordcount">
+    Add Wordcount
+  </button>
+
+  <div id="wordcount" class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <form action="/graph/<%= @graph.id %>" class="form-inline" method="POST">
+          <p> Add wordcount for today </p>
+          <input type="number" placeholder="Word Count" name="wordcount">
+          <button type="submit" class="btn">submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog">
-      <div class="modal-content">
+      <div class="modal-content" id="longModal">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title">Overview</h4>
@@ -30,32 +47,66 @@
                 { "name":"Wordcount Required", "data": @user_data}
             ], colors: ["blue", colour]
             )%>
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
+          <% unless @graph.on_track? %>
+            <div class="alert alert-danger" role="alert"> Stay below the blue line! </div>
+          <% end %>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
   <div class="row">
     <div class="col-md-6">
       <h4> About your project </h4>
-      <p> Stay below the blue line! </p>
-      <p> So far you have written <%= @graph.cumulative %> words on this project. You should have written <%= @graph.current_burndown %> by now!</p>
-      <p> You wanted to write <%= @graph.wordcount %> words in <%= @graph.days %> days. </p>
-      <p> This means writing <%= @graph.wordcount_per_day %> words per day. You'll be all done by <%= @graph.finish_date %> if you do your word count daily! </p>
+      <table class="table table-striped">
+        <tr>
+          <td> Created on </td>
+          <td> <%= @graph.fancy_start_date %> </td>
+        </tr>
+        <tr>
+          <td> Words </td>
+          <td> <%= @graph.wordcount %> </td>
+        </tr>
+        <tr>
+          <td> Days </td>
+          <td> <%= @graph.days %> </td>
+        </tr>
+        <tr>
+          <td> Recommended Daily Wordcount </td>
+          <td> <%= @graph.wordcount_per_day %> </td>
+        </tr>
+        <tr>
+          <td> Finish Date </td>
+          <td> <%= @graph.fancy_finish_date %> </td>
+        </tr>
+      </table>
     </div>
     <div class="col-md-6">
-      <h4> Adding to your wordcount </h4>
-      <p> You can add your wordcount below! </p>
-
-      <form action="/graph/<%= @graph.id %>" class="form-inline" method="POST">
-        <p> I wrote </p>
-        <input type="number" placeholder="Word Count" name="wordcount">
-        <p> words today </p>
-        <button type="submit" class="btn">submit</button>
-      </form>
+      <h4> Current Stats </h4>
+      <table class="table table-striped">
+        <tr>
+          <td>Date Today</td>
+          <td><%= Date.today.strftime("%B %-d, %Y") %></td>
+        </tr>
+        <tr>
+          <td>Words Remaining</td>
+          <td><%= @graph.words_left %></td>
+        </tr>
+        <tr>
+          <td>Days Remaining</td>
+          <td><%= @graph.days_left %></td>
+        </tr>
+        <tr>
+          <td>Adjusted Daily Wordcount</td>
+          <td><%= @graph.current_required_wordcount %> </td>
+        </tr>
+        <tr>
+          <td>Words Written</td>
+          <td><%= @graph.cumulative %></td>
+        </tr>
+      </table>
     </div>
   </div>
 </div>
