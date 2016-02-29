@@ -83,10 +83,20 @@ post '/graph/:id' do
   authenticate!
   graph = Graph.find(params[:id])
   time = Date.today.strftime("%F")
-  if graph.daily_wordcount[time]
+
+  if (graph.daily_wordcount[time] && params['wordcount'])
     graph.daily_wordcount[time] += params['wordcount'].to_i
   else
     graph.daily_wordcount[time] = params['wordcount'].to_i
+  end
+
+  if (graph.daily_wordcount[time] && params['adjust_wordcount'])
+    tmp = params['adjust_wordcount'].to_i - graph.cumulative
+    if graph.daily_wordcount[time]
+      graph.daily_wordcount[time] += tmp
+    else
+      graph.daily_wordcount[time] = tmp
+    end
   end
   graph.save
   redirect to('/graph/' + graph.id)
@@ -120,7 +130,7 @@ post '/new' do
       days: params['days'].to_i,
       daily_wordcount: {}
     )
-      redirect to('/graph/' + graph.id)
+    redirect to('/graph/' + graph.id)
   end
   redirect to('/new')
 end

@@ -20,6 +20,21 @@
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#wordcount">
     Add Wordcount
   </button>
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#adjust_wordcount">
+    Adjust Wordcount
+  </button>
+
+  <div id="adjust_wordcount" class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <form action="/graph/<%= @graph.id %>" class="form-inline" method="POST">
+          <p>Warning: this will permanently alter your total wordcount to the amount you enter. This can not be undone.</p>
+          <input type="number" placeholder="Adjust Wordcount" name="adjust_wordcount">
+          <button type="submit" class="btn">submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
 
   <div id="wordcount" class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
