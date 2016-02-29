@@ -98,6 +98,16 @@ get '/new' do
   erb :new
 end
 
+get '/about' do
+  @graphs = Graph.where(user: session[:user_id].to_s)
+  erb :about
+end
+
+get '/contact' do
+  @graphs = Graph.where(user: session[:user_id].to_s)
+  erb :contact
+end
+
 post '/new' do
   authenticate!
   if params['wordcount'].to_i > params['days'].to_i
