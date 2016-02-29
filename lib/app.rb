@@ -102,6 +102,12 @@ post '/graph/:id' do
   redirect to('/graph/' + graph.id)
 end
 
+post '/delete/:id' do
+  authenticate!
+  Graph.any_in(:_id => [params[:id]]).destroy_all
+  redirect to('/index')
+end
+
 get '/new' do
   authenticate!
   @graphs = Graph.where(user: session[:user_id].to_s)

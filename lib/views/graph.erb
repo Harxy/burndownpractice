@@ -14,6 +14,8 @@
     ], min: nil, colors: ["blue", colour]
     )%>
 
+
+
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
     Overview
   </button>
@@ -23,7 +25,21 @@
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#adjust_wordcount">
     Adjust Wordcount
   </button>
-
+  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete">
+    Delete Project
+  </button>
+  <div id="delete" class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <p> This is your final chance. Deleting the Project is permanent. Delete the project? </p>
+        <form style="float:right;" action="/delete/<%=@graph.id %>", method="POST">
+          <button type="submit" class="btn btn-danger"  >
+            Delete Project
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
   <div id="adjust_wordcount" class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
