@@ -19,18 +19,24 @@ end
 
 enable :sessions
 
+def setup!
+  authenticate!
+  @graphs = Graph.where(user: session[:user_id].to_s)
+  @user = current_user
+end
+
 get '/' do
+  setup!
   redirect to('/index')
 end
 
 get '/index' do
-  authenticate!
-  @graphs = Graph.where(user: session[:user_id].to_s)
+  setup!
   erb :index
 end
 
 get '/graph/:id' do
-  authenticate!
+  setup!
   @graphs = Graph.where(user: session[:user_id].to_s)
   @graph = Graph.find(params[:id])
   graph_data = BuildGraph.new(graph: @graph)
@@ -81,7 +87,7 @@ get "/signout" do
 end
 
 post '/graph/:id' do
-  authenticate!
+  setup!
   user = current_user
   graph = Graph.find(params[:id])
   time = Date.today.strftime("%F")
@@ -110,13 +116,13 @@ post '/graph/:id' do
 end
 
 post '/delete/:id' do
-  authenticate!
+  setup!
   Graph.any_in(:_id => [params[:id]]).destroy_all
   redirect to('/index')
 end
 
 get '/new' do
-  authenticate!
+  setup!
   @graphs = Graph.where(user: session[:user_id].to_s)
   erb :new
 end
@@ -132,7 +138,7 @@ get '/contact' do
 end
 
 post '/new' do
-  authenticate!
+  setup!
   if params['wordcount'].to_i > params['days'].to_i
     graph = Graph.create(
       user: session[:user_id],
