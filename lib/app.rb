@@ -51,7 +51,8 @@ post '/signup' do
     email: params['email'],
     password: password_hash,
     username: params['username'],
-    password_salt: password_salt
+    password_salt: password_salt,
+    wordcount_badge: 0
   )
   session[:user_id] = user._id
   session[:user_name] = user.username
