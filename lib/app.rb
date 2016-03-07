@@ -81,24 +81,30 @@ end
 
 post '/graph/:id' do
   authenticate!
+  user = current_user
   graph = Graph.find(params[:id])
   time = Date.today.strftime("%F")
 
   if (graph.daily_wordcount[time] && params['wordcount'])
     graph.daily_wordcount[time] += params['wordcount'].to_i
+    user.wordcount_badge += params['wordcount'].to_i
   else
     graph.daily_wordcount[time] = params['wordcount'].to_i
+    user.wordcount_badge += params['wordcount'].to_i
   end
 
   if (graph.daily_wordcount[time] && params['adjust_wordcount'])
     tmp = params['adjust_wordcount'].to_i - graph.cumulative
     if graph.daily_wordcount[time]
       graph.daily_wordcount[time] += tmp
+      user.wordcount_badge += tmp
     else
       graph.daily_wordcount[time] = tmp
+      user.wordcount_badge += tmp
     end
   end
   graph.save
+  user.save
   redirect to('/graph/' + graph.id)
 end
 
@@ -139,4 +145,8 @@ post '/new' do
     redirect to('/graph/' + graph.id)
   end
   redirect to('/new')
+end
+
+def current_user
+  User.find_by(_id: session[:user_id])
 end
