@@ -91,28 +91,25 @@ post '/graph/:id' do
   user = current_user
   graph = Graph.find(params[:id])
   time = Date.today.strftime("%F")
-
-  if (graph.daily_wordcount[time] && params['wordcount'])
-    graph.daily_wordcount[time] += params['wordcount'].to_i
-    user.wordcount_badge += params['wordcount'].to_i
+  if params['adjust_wordcount']
+    wordcount = params['adjust_wordcount'].to_i - graph.cumulative
+    add_wordcount(wordcount, time, graph, user)
   else
-    graph.daily_wordcount[time] = params['wordcount'].to_i
-    user.wordcount_badge += params['wordcount'].to_i
-  end
-
-  if (graph.daily_wordcount[time] && params['adjust_wordcount'])
-    tmp = params['adjust_wordcount'].to_i - graph.cumulative
-    if graph.daily_wordcount[time]
-      graph.daily_wordcount[time] += tmp
-      user.wordcount_badge += tmp
-    else
-      graph.daily_wordcount[time] = tmp
-      user.wordcount_badge += tmp
-    end
+    add_wordcount(params['wordcount'].to_i, time, graph, user)
   end
   graph.save
   user.save
   redirect to('/graph/' + graph.id)
+end
+
+def add_wordcount(wordcount, time, graph, user)
+  if (graph.daily_wordcount[time] && wordcount)
+    graph.daily_wordcount[time] += wordcount.to_i
+    user.wordcount_badge += wordcount.to_i
+  else
+    graph.daily_wordcount[time] = wordcount.to_i
+    user.wordcount_badge += wordcount.to_i
+  end
 end
 
 post '/delete/:id' do
@@ -128,11 +125,13 @@ get '/new' do
 end
 
 get '/about' do
+  @user = current_user
   @graphs = Graph.where(user: session[:user_id].to_s)
   erb :about
 end
 
 get '/contact' do
+  @user = current_user
   @graphs = Graph.where(user: session[:user_id].to_s)
   erb :contact
 end

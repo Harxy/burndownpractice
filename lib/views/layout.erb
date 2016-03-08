@@ -46,7 +46,7 @@
             <li><a href="/contact">Contact</a></li>
           </ul>
           <% if session[:user_id] %>
-            <p class="navbar-text">Signed in as <a href="/signout" class="navbar-link"><%= session[:user_name] %></a></p>
+            <p class="navbar-text"> <b><a href="/signout">Sign Out</a></b></p>
             <p class="navbar-text navbar-right"><img src="/img/star.png" width="28px"> <b> <%= @user.wordcount_badge %> </b></p>
           <% else %>
             <p class="navbar-text navbar-right"><a href="/signin" class="navbar-link">Sign in</a></p>

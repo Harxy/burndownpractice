@@ -20,13 +20,13 @@
     Overview
   </button>
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#wordcount">
-    Add Wordcount
+    Add to wordcount
   </button>
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#adjust_wordcount">
-    Adjust Wordcount
+    Update total
   </button>
-  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete">
-    Delete Project
+  <button type="button" class="pull-right btn btn-danger" data-toggle="modal" data-target="#delete">
+    Delete project
   </button>
   <div id="delete" class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
@@ -44,8 +44,8 @@
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
         <form action="/graph/<%= @graph.id %>" class="form-inline" method="POST">
-          <p>Warning: this will permanently alter your total wordcount to the amount you enter. This can not be undone.</p>
-          <input type="number" placeholder="Adjust Wordcount" name="adjust_wordcount">
+          <p>This will alter the total amount of words written, assigning any extra to today's total.</p>
+          <input type="number" placeholder="Adjust Wordcount" name="adjust_wordcount" autofocus>
           <button type="submit" class="btn">submit</button>
         </form>
       </div>
@@ -56,8 +56,8 @@
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
         <form action="/graph/<%= @graph.id %>" class="form-inline" method="POST">
-          <p> Add wordcount for today </p>
-          <input type="number" placeholder="Word Count" name="wordcount">
+          <p> Add additional wordcount for today </p>
+          <input type="number" placeholder="Word Count" name="wordcount" autofocus>
           <button type="submit" class="btn">submit</button>
         </form>
       </div>

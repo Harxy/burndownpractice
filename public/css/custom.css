@@ -1,3 +1,16 @@
+.navbar-nav li a {
+  padding-top: 17px
+}
+
+.navbar-text {
+  margin-top: 0px;
+  padding-top: 17px
+}
+
+.navbar-brand {
+  padding-top: 17px
+}
+
 .list-group-item {
   margin-bottom: 5px;
 }
