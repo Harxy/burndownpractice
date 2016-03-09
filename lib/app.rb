@@ -37,7 +37,6 @@ end
 
 get '/graph/:id' do
   setup!
-  @graphs = Graph.where(user: session[:user_id].to_s)
   @graph = Graph.find(params[:id])
   graph_data = BuildGraph.new(graph: @graph)
   @data = graph_data.burndown_data
@@ -120,7 +119,6 @@ end
 
 get '/new' do
   setup!
-  @graphs = Graph.where(user: session[:user_id].to_s)
   erb :new
 end
 
