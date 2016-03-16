@@ -39,12 +39,17 @@ class Graph
     date_started.strftime("%B %-d, %Y")
   end
 
+  def finish_date_object
+    (date_started + days)
+  end
+  
   def finish_date
     (date_started + days - 1).strftime("%F")
   end
 
   def days_left
-    Date.parse(finish_date).mjd - Date.today.mjd + 1
+    days = Date.parse(finish_date).mjd - Date.today.mjd + 1
+    days <= 2 ? 2 : days
   end
 
   def words_left
@@ -52,6 +57,6 @@ class Graph
   end
 
   def current_required_wordcount
-    words_left / days_left
+    words_left / (days_left - 1)
   end
 end

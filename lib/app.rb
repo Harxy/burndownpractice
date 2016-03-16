@@ -35,9 +35,29 @@ get '/index' do
   erb :index
 end
 
+get '/graph/:id/finished' do
+  setup!
+  @graph = Graph.find(params[:id])
+  erb :finished
+end
+
+post '/graph/:id/finished' do
+  setup!
+  @graph = Graph.find(params[:id])
+  case params[:option]
+  when 'push_date'
+    puts 'push'
+  when 'complete'
+    puts 'complete'
+  end
+end
+
 get '/graph/:id' do
   setup!
   @graph = Graph.find(params[:id])
+  if @graph.finish_date_object.mjd < Date.today.mjd
+    redirect to("/graph/#{params[:id]}/finished")
+  end
   graph_data = BuildGraph.new(graph: @graph)
   @data = graph_data.burndown_data
   @user_data = graph_data.user_data
