@@ -46,10 +46,17 @@ post '/graph/:id/finished' do
   @graph = Graph.find(params[:id])
   case params[:option]
   when 'push_date'
-    puts 'push'
+    days_updated = Date.today.mjd - @graph.finish_date_object.mjd + 3
+    @graph.update_attributes(:days => days_updated)
+    redirect to('/index')
   when 'complete'
-    puts 'complete'
+    mark_completed(@graph)
+    redirect to('/index')
   end
+end
+
+def mark_completed(graph)
+  graph.update_attributes(:completed => true)
 end
 
 get '/graph/:id' do
@@ -129,6 +136,13 @@ def add_wordcount(wordcount, time, graph, user)
     graph.daily_wordcount[time] = wordcount.to_i
     user.wordcount_badge += wordcount.to_i
   end
+end
+
+post '/complete/:id' do
+  setup!
+  graph = Graph.find_by(:_id => params[:id])
+  mark_completed(graph)
+  redirect to('/index')
 end
 
 post '/delete/:id' do

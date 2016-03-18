@@ -3,11 +3,12 @@
   <p> This project's deadline was <%= @graph.fancy_finish_date %>.</p>
   <p> As you may well be aware, this time has passed. How do you want to handle this awkward situation? You can push back the deadline by 3 days, or you can just mark the project as complete and we'll say no more about it...</p>
 
-  <button type="button" class="btn btn-primary">
+  <form action='/graph/<%= @graph.id %>/finished' method='post'>
+  <button type="submit" class="btn btn-primary" name="option" value="push_date">
     Push back
   </button>
-  <button type="button" class="btn btn-primary">
+  <button type="submit" class="btn btn-primary" name="option" value="complete">
     Mark as complete
   </button>
-      
+  </form>
 </div>

@@ -10,7 +10,7 @@ class Graph
   field :days, type: Integer
   field :daily_wordcount, type: Hash
   field :desc, type: String
-
+  field :completed, type: Boolean, default: false
   def wordcount_per_day
     wordcount / days
   end

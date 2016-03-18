@@ -25,6 +25,9 @@
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#adjust_wordcount">
     UPDATE current wordcount
   </button>
+  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#complete">
+    Complete project
+  </button>
   <button type="button" class="pull-right btn btn-danger" data-toggle="modal" data-target="#delete">
     Delete project
   </button>
@@ -35,6 +38,18 @@
         <form style="float:right;" action="/delete/<%=@graph.id %>", method="POST">
           <button type="submit" class="btn btn-danger"  >
             Delete Project
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div id="complete" class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <p>Because of the shoddy prototype nature of this webapp, you cannot undo this once done. Are you sure you want to mark the project as completed?</p>
+        <form style="float:right;" action="/complete/<%=@graph.id %>", method="POST">
+          <button type="submit" class="btn btn-primary"  >
+            Complete Project
           </button>
         </form>
       </div>
